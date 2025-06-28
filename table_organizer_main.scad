@@ -21,6 +21,24 @@ module create_item_spaces(thicknessList, idx = 0, xOff = 0) {
     }
 }
 
+module create_item_spaces_for_hex(thicknessList, idx = 0, xOff = 0) {
+    if (idx < len(thicknessList)) {
+        // create current item and recurse
+        itemPoints = [
+            [thicknessList[idx] - itemCornerRadius * 2, mainBaseHeight, 0],
+            [0, mainBaseHeight, 0],
+            [0, 0,                          0],
+            [thicknessList[idx] - itemCornerRadius * 2, 0,              0],
+        ];
+
+        translate([xOff + mainWallThickness + itemCornerRadius, 0, 0]) {
+            polygon(polyRound(itemPoints, fn = 20));
+        }
+
+        create_item_spaces_for_hex(thicknessList, idx + 1, xOff + mainWallThickness + thicknessList[idx]);
+    }
+}
+
 module main_wall_base() {
     difference() {
         polygon(polyRound(mainBasePoints, fn = 20));
@@ -59,16 +77,16 @@ module hex_pattern_even_offset(count, off = 1) {
     translate([0, ((basePatternHeight + basePatternGapThickness / 2) + (basePatternHeight * 2 + basePatternGapThickness) * off) * dir, 0]) hex_pattern_even(count);
 }
 
-module hex_pattern() {
+module hex_pattern(count = 5) {
 
-    for (i = [-5:1:4]) {
+    for (i = [-count:1:count - 1]) {
         hex_pattern_odd_offset(3, i);
     }
 
-    for (i = [-5:1:-1]) {
+    for (i = [-count:1:-1]) {
         hex_pattern_even_offset(4, i);
     }
-    for (i = [1:1:5]) {
+    for (i = [1:1:count]) {
         hex_pattern_even_offset(4, i);
     }
 }
@@ -83,7 +101,7 @@ module main_back_plate() {
 }
 
 module hex_cylinders() {
-    translate([mainBaseWidth / 2, mainBaseHeight / 2, mainZHeight / 2]) {
+    translate([mainBaseWidth / 2, mainBaseHeight / 2, mainZHeight / 2 + basePatternZOffset]) {
         rotate([0, 90, 0]) {
             lx(mainBaseWidth, center = true) hex_pattern();
         }
@@ -126,17 +144,34 @@ module main_body() {
     }
 }
 
+
+/*create_item_spaces(mainItemThicknessList);*/
+
+
 /*main_side_shell_3d();*/
 /*main_body();*/
 
 /*hex_cylinders();*/
-difference() {
-    main_body();
+
+module main_top_body() {
     difference() {
-        intersection() {
-            hex_cylinders();
-            main_body();
+        main_body();
+        difference() {
+            intersection() {
+                hex_cylinders();
+                main_body();
+            }
+            main_side_shell_3d();
         }
-        main_side_shell_3d();
+        intersection() {
+            translate([mainBaseWidth / 2, mainBaseHeight / 2, mainZHeight / 2 + basePatternZOffset]) {
+                rotate([0, 90, 90]) {
+                    lx(mainBaseHeight, center = true) hex_pattern(10);
+                }
+            }
+            lx(mainZHeight - mainSideEdgeThickness) create_item_spaces_for_hex(mainItemThicknessList);
+        }
     }
 }
+
+main_top_body();
