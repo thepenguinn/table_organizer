@@ -15,11 +15,16 @@ phoneStandThickness    = 2.1 * 10 ; // cm 1.8
 mainBaseHeight = 8 * 10 ; // cm
 mainWallThickness = 2;
 
-mainBottomHeight = 13 * 10 ; // cm
-mainBottomThickness = 2;
+mainBaseCornerRadius = 4;
+mainBaseLeftCornerRadius = mainBaseCornerRadius;
+mainBaseRightCornerRadius = mainBaseCornerRadius;
 
-mainBaseLeftCornerRadius = 4;
-mainBaseRightCornerRadius = 4;
+mainBottomHeight = 11 * 10 ; // cm
+mainBottomThickness = 1;
+mainBottomCornerRadius = mainBaseCornerRadius;
+mainBottomEdgeWidth = 2;
+mainBottomEdgeHeight = 2;
+
 mainSideCornerRadius = 32;
 mainSideEdgeThickness = mainWallThickness;
 itemCornerRadius = 2;
@@ -27,12 +32,12 @@ itemCornerRadius = 2;
 mainZHeight = 8.5 * 10; // cm
 
 mainItemThicknessList = [
+    habitTrackerThickness,
     kindleThickness,
+    phoneStandThickness,
     calculatorThickness,
     instrumentBoxThickness,
-    habitTrackerThickness,
     powerBankThickness,
-    phoneStandThickness,
 ];
 
 function sum_list(list, idx = 0) =
@@ -54,6 +59,13 @@ mainBasePoints = [
     [0, mainBaseHeight,             mainBaseLeftCornerRadius],
     [0, 0,                          0],
     [mainBaseWidth, 0,              0],
+];
+
+mainBottomPoints = [
+    [mainBaseWidth, mainBottomHeight, mainBottomCornerRadius],
+    [0, mainBottomHeight,             mainBottomCornerRadius],
+    [0, 0,                          mainBottomCornerRadius * 3],
+    [mainBaseWidth, 0,              mainBottomCornerRadius * 3],
 ];
 
 // hex pattern

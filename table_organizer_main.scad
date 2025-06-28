@@ -174,4 +174,26 @@ module main_top_body() {
     }
 }
 
+module main_bottom_face() {
+    polygon(polyRound(mainBottomPoints, fn = 12));
+}
+
+module main_bottom_shell() {
+    shell2d(-mainBottomEdgeWidth) {
+        main_bottom_face();
+    }
+}
+
+module main_bottom_hexed() {
+    difference() {
+        main_bottom_face();
+        translate([mainBaseWidth / 2, mainBottomHeight / 2, 0]) hex_pattern(6);
+    }
+    main_bottom_shell();
+}
+
+
 main_top_body();
+translate([0, - (mainBottomHeight - mainBaseHeight), 0]) {
+    lx(mainBottomThickness) main_bottom_hexed();
+}
