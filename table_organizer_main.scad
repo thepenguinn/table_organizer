@@ -193,7 +193,22 @@ module main_bottom_hexed() {
 }
 
 
+module holder() {
+    lx(holderZHeight) {
+        translate([-holderThickness, - holderThickness * 5 / 2, 0]) {
+            difference() {
+                shell2d(-holderThickness) polygon(polyRound(holderBottomPoints, fn = 12));
+                square([holderThickness, holderThickness * 5]);
+                translate([holderThickness * 2, holderThickness * 2]) square([holderThickness, holderThickness]);
+            }
+        }
+    }
+}
+
 main_top_body();
 translate([0, - (mainBottomHeight - mainBaseHeight), 0]) {
     lx(mainBottomThickness) main_bottom_hexed();
 }
+
+translate([mainBaseWidth, mainBaseHeight - holderThickness * 5 / 2 - holderOffset, 0]) holder();
+translate([mainBaseWidth, holderThickness * 5 / 2 + holderOffset, 0]) holder();

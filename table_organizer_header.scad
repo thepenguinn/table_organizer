@@ -76,6 +76,18 @@ basePatternHeight = sin(60) * basePatternHoleRadius;
 basePatternGapHori = basePatternGapThickness / sin(60);
 basePatternZOffset = - basePatternHoleRadius / 0.556;
 
+holderThickness = 2;
+holderCornerRadius = 1;
+holderOffset = 10;
+holderZHeight = 4 * 10; // cm
+
+holderBottomPoints = [
+    [holderThickness * 3, holderThickness * 5, holderCornerRadius],
+    [0, holderThickness * 5,             holderCornerRadius],
+    [0, 0,                          holderCornerRadius],
+    [holderThickness * 3, 0,              holderCornerRadius],
+];
+
 module lx(h, center = false) {
     mirror([0, 0, h < 0 ? 1 : 0]) linear_extrude(abs(h), center = center) children();
 }
