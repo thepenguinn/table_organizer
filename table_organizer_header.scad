@@ -68,6 +68,41 @@ mainBottomPoints = [
     [mainBaseWidth, 0,              mainBottomCornerRadius * 3],
 ];
 
+subTallMajorHoleWidth = 6 * 10; // cm
+subTallMinorHoleWidth = 2 * 10; // cm
+subTallHoleHeight = 2 * 10; // cm
+subTallCornerRadius = 2;
+
+subWallThickness = 2;
+subWallEdge = 2;
+subBaseCornerRadius = 4;
+
+subBaseHeight = mainBaseHeight;
+subBaseWidth = subTallMajorHoleWidth + subTallMinorHoleWidth + subWallThickness * 2;
+
+subZHeight = 5 * 10 ; // cm
+
+subTallMajorPoints = [
+    [subTallMajorHoleWidth, subTallHoleHeight, subTallCornerRadius],
+    [0,                     subTallHoleHeight, subTallCornerRadius],
+    [0,                     0,                 subTallCornerRadius],
+    [subTallMajorHoleWidth, 0,                 subTallCornerRadius],
+];
+
+subTallMinorPoints = [
+    [subTallMinorHoleWidth, subTallHoleHeight, subTallCornerRadius],
+    [0,                     subTallHoleHeight, subTallCornerRadius],
+    [0,                     0,                 subTallCornerRadius],
+    [subTallMinorHoleWidth, 0,                 subTallCornerRadius],
+];
+
+subBasePoints = [
+    [subBaseWidth, subTallHoleHeight, subBaseCornerRadius],
+    [0,            subTallHoleHeight, subBaseCornerRadius],
+    [0,            0,                 0],
+    [subBaseWidth, 0,                 0],
+];
+
 // hex pattern
 
 basePatternHoleRadius = 6;
@@ -90,4 +125,49 @@ holderBottomPoints = [
 
 module lx(h, center = false) {
     mirror([0, 0, h < 0 ? 1 : 0]) linear_extrude(abs(h), center = center) children();
+}
+
+module hex_pattern_odd(count) {
+    for (i = [0:1:count]) {
+        translate([((basePatternHoleRadius + basePatternGapHori) * 2 + basePatternHoleRadius) * i, 0, 0]) circle(basePatternHoleRadius, $fn = 6);
+    }
+    for (i = [1:1:count]) {
+        translate([-((basePatternHoleRadius + basePatternGapHori) * 2 + basePatternHoleRadius) * i, 0, 0]) circle(basePatternHoleRadius, $fn = 6);
+    }
+}
+
+module hex_pattern_even(count) {
+    for (i = [0:1:count - 1]) {
+        translate([(((basePatternHoleRadius + basePatternGapHori) * 2 + basePatternHoleRadius) * i + (basePatternHoleRadius * 1.5) + basePatternGapHori), 0, 0]) circle(basePatternHoleRadius, $fn = 6);
+    }
+
+    for (i = [0:1:count - 1]) {
+        translate([-(((basePatternHoleRadius + basePatternGapHori) * 2 + basePatternHoleRadius) * i + (basePatternHoleRadius * 1.5) + basePatternGapHori), 0, 0]) circle(basePatternHoleRadius, $fn = 6);
+    }
+}
+
+
+module hex_pattern_odd_offset(count, off) {
+    translate([0, (basePatternHeight * 2 + basePatternGapThickness) * off, 0]) hex_pattern_odd(count);
+}
+
+module hex_pattern_even_offset(count, off = 1) {
+    dir = off / abs(off);
+    off = abs(off) - 1;
+
+    translate([0, ((basePatternHeight + basePatternGapThickness / 2) + (basePatternHeight * 2 + basePatternGapThickness) * off) * dir, 0]) hex_pattern_even(count);
+}
+
+module hex_pattern(count = 5) {
+
+    for (i = [-count:1:count - 1]) {
+        hex_pattern_odd_offset(3, i);
+    }
+
+    for (i = [-count:1:-1]) {
+        hex_pattern_even_offset(4, i);
+    }
+    for (i = [1:1:count]) {
+        hex_pattern_even_offset(4, i);
+    }
 }
