@@ -151,5 +151,50 @@ module hexed_short_wall() {
     }
 }
 
-hexed_short_wall();
-hexed_tall_wall();
+module sub_bottom_plate() {
+    shell2d(subWallThickness, -100) {
+        union() {
+            place_sub_short() {
+                sub_short_plate();
+            }
+            sub_tall_plate();
+        }
+    }
+}
+
+
+module hexed_bottom_plate() {
+    difference() {
+        sub_bottom_plate();
+        translate([subBaseWidth / 2, subBaseHeight / 2, 0]) hex_pattern();
+    }
+    shell2d(-subWallThickness) sub_bottom_plate();
+}
+
+module sub_full() {
+    translate([0, 0, subBottomHexThickness]) {
+        translate([0, 0, -subBottomHexThickness]) {
+            lx(-subBottomFullThickess) {
+                sub_bottom_plate();
+            }
+        }
+        lx(-subBottomHexThickness) {
+            hexed_bottom_plate();
+        }
+    }
+    hexed_short_wall();
+    hexed_tall_wall();
+    mirror([1, 0, 0]) {
+        translate([0, mainBaseHeight - holderThickness * 5 / 2 - holderOffset, 0]) holder();
+        intersection() {
+            union() {
+                rotate([0, 90, 0]) lx(subBaseWidth) shell2d(-subSideWallEdge, -100) sub_side_plate();
+                lx(subBottomThickness * 2, center = true)square(100);
+            }
+            translate([0, holderThickness * 5 / 2 + holderOffset, 0]) holder();
+        }
+    }
+}
+
+/*#lx(subBottomThickness * 2, center = true)square(100);*/
+sub_full();

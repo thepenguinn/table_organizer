@@ -68,9 +68,9 @@ mainBottomPoints = [
     [mainBaseWidth, 0,              mainBottomCornerRadius * 3],
 ];
 
-subTallMajorHoleWidth = 6 * 10; // cm
+subTallMajorHoleWidth = 7 * 10; // cm
 subTallMinorHoleWidth = 2 * 10; // cm
-subTallHoleHeight = 2 * 10; // cm
+subTallHoleHeight = 1.75  * 10; // cm
 subTallCornerRadius = 2;
 
 subWallThickness = 2;
@@ -94,6 +94,10 @@ subSideHeight = 15;
 
 subSideCornerRadius = 15;
 subSideWallEdge = 2;
+
+subBottomHexThickness = 1.2;
+subBottomFullThickess = 0.8;
+subBottomThickness = subBottomHexThickness + subBottomFullThickess;
 
 subTallMajorPoints = [
     [subTallMajorHoleWidth, subTallHoleHeight, subTallCornerRadius],
@@ -206,5 +210,17 @@ module hex_pattern(count = 5) {
     }
     for (i = [1:1:count]) {
         hex_pattern_even_offset(4, i);
+    }
+}
+
+module holder() {
+    lx(holderZHeight) {
+        translate([-holderThickness, - holderThickness * 5 / 2, 0]) {
+            difference() {
+                shell2d(-holderThickness) polygon(polyRound(holderBottomPoints, fn = 12));
+                square([holderThickness, holderThickness * 5]);
+                translate([holderThickness * 2, holderThickness * 2]) square([holderThickness, holderThickness]);
+            }
+        }
     }
 }
