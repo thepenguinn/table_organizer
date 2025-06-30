@@ -19,6 +19,14 @@ module sub_tall_major_vertical() {
     square([subWallThickness + subTallCornerRadius * 2, subTallHoleHeight + subWallThickness * 2]);
 }
 
+module sub_tall_major_horizontal() {
+    translate([-subWallThickness, -subTallCornerRadius - subWallThickness, 0])
+    square([subTallMajorHoleWidth + subWallThickness * 2, subWallThickness + subTallCornerRadius * 2]);
+
+    translate([-subWallThickness, subTallHoleHeight - subTallCornerRadius, 0])
+    square([subTallMajorHoleWidth + subWallThickness * 2, subWallThickness + subTallCornerRadius * 2]);
+}
+
 module sub_tall_minor_plate() {
     polygon(polyRound(subTallMinorPoints, fn = 12));
 }
@@ -29,6 +37,14 @@ module sub_tall_minor_vertical() {
 
     translate([subTallMinorHoleWidth - subTallCornerRadius, -subWallThickness, 0])
     square([subWallThickness + subTallCornerRadius * 2, subTallHoleHeight + subWallThickness * 2]);
+}
+
+module sub_tall_minor_horizontal() {
+    translate([-subWallThickness, -subTallCornerRadius - subWallThickness, 0])
+    square([subTallMinorHoleWidth + subWallThickness * 2, subWallThickness + subTallCornerRadius * 2]);
+
+    translate([-subWallThickness, subTallHoleHeight - subTallCornerRadius, 0])
+    square([subTallMinorHoleWidth + subWallThickness * 2, subWallThickness + subTallCornerRadius * 2]);
 }
 
 module place_sub_tall() {
@@ -50,7 +66,7 @@ module hexed_tall_wall() {
     difference() {
         lx(subZHeight) shell2d(subWallThickness) sub_tall_plate();
         difference() {
-            rotate([-90, 0, 0]) translate([subBaseWidth / 2, 0, 0]) lx(subBaseHeight) rotate([0, 0, 90]) hex_pattern();
+            translate([0, 0, subWallHexZOffset]) rotate([-90, 0, 0]) translate([subBaseWidth / 2, 0, 0]) lx(subBaseHeight) rotate([0, 0, 90]) hex_pattern();
             intersection() {
                 lx(subZHeight) {
                     place_sub_tall() {
@@ -60,6 +76,19 @@ module hexed_tall_wall() {
                 }
                 lx(subZHeight) shell2d(subWallThickness) sub_tall_plate();
             }
+        }
+        difference() {
+            translate([0, 0, subWallHexZOffset]) rotate([0, 90, 0]) translate([0, subBaseHeight / 2, 0]) lx(subBaseWidth) hex_pattern();
+            intersection() {
+                lx(subZHeight) {
+                    place_sub_tall() {
+                        sub_tall_minor_horizontal();
+                        sub_tall_major_horizontal();
+                    }
+                }
+                lx(subZHeight) shell2d(subWallThickness) sub_tall_plate();
+            }
+
         }
     }
     lx(subWallEdge) shell2d(subWallThickness) sub_tall_plate();

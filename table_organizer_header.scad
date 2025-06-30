@@ -78,9 +78,11 @@ subWallEdge = 2;
 subBaseCornerRadius = 4;
 
 subBaseHeight = mainBaseHeight;
-subBaseWidth = subTallMajorHoleWidth + subTallMinorHoleWidth + subWallThickness * 2;
+subBaseWidth = subTallMajorHoleWidth + subTallMinorHoleWidth + subWallThickness * 3;
 
 subZHeight = 5 * 10 ; // cm
+
+subWallHexZOffset = 8.5;
 
 subTallMajorPoints = [
     [subTallMajorHoleWidth, subTallHoleHeight, subTallCornerRadius],
