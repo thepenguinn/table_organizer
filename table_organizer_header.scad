@@ -80,9 +80,20 @@ subBaseCornerRadius = 4;
 subBaseHeight = mainBaseHeight;
 subBaseWidth = subTallMajorHoleWidth + subTallMinorHoleWidth + subWallThickness * 3;
 
+subShortHoleWidth = subBaseWidth - subWallThickness * 2;
+subShortHoleHeight = subBaseHeight - subTallHoleHeight * 2 - subWallThickness * 4;
+
+subShortCornerRadius = 2;
+
 subZHeight = 5 * 10 ; // cm
 
 subWallHexZOffset = 8.5;
+
+subSideZHeight = 17;
+subSideHeight = 15;
+
+subSideCornerRadius = 15;
+subSideWallEdge = 2;
 
 subTallMajorPoints = [
     [subTallMajorHoleWidth, subTallHoleHeight, subTallCornerRadius],
@@ -98,12 +109,36 @@ subTallMinorPoints = [
     [subTallMinorHoleWidth, 0,                 subTallCornerRadius],
 ];
 
+subShortPoints = [
+    [subShortHoleWidth, subShortHoleHeight, subShortCornerRadius],
+    [0,                 subShortHoleHeight, subShortCornerRadius],
+    [0,                 0,                  subShortCornerRadius],
+    [subShortHoleWidth, 0,                  subShortCornerRadius],
+];
+
 subBasePoints = [
     [subBaseWidth, subTallHoleHeight, subBaseCornerRadius],
     [0,            subTallHoleHeight, subBaseCornerRadius],
     [0,            0,                 0],
     [subBaseWidth, 0,                 0],
 ];
+
+subSidePoints = [
+    [0, subShortHoleHeight + subWallThickness * 2, 0],
+    [-subZHeight, subShortHoleHeight + subWallThickness * 2, 0],
+    [-subZHeight, subShortHoleHeight + subWallThickness * 2 - subSideHeight, subSideCornerRadius],
+    [-subSideZHeight, 0, 0],
+    [0, 0, 0],
+];
+
+subFrontPoints = [
+    [subBaseWidth - subSideWallEdge, -subSideWallEdge, 0],
+    [subSideWallEdge, -subSideWallEdge, 0],
+    [subSideWallEdge, -subSideZHeight + subSideWallEdge, 0],
+    [subBaseWidth - subSideWallEdge, -subSideZHeight + subSideWallEdge, 0],
+];
+
+
 
 // hex pattern
 
